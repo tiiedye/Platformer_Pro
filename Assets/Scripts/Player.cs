@@ -8,32 +8,45 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _playerSpeed = 5.0f;
     private float _gravity = 1.0f;
+    private float _jumpHeight = 25.0f;
+    private float _doubleJumpHeight = 40.0f;
+    private float _yVelocity;
+    private bool _canDoubleJump = false;
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         bool grounded = _controller.isGrounded;
-        // Getting Horizontal Input.
         float horizontalInput = Input.GetAxis("Horizontal");
 
+        // Player's direction and velocity.
         Vector3 direction = new Vector3(horizontalInput, 0, 0);
-        // Setting Player's Velocity.
         Vector3 velocity = direction * _playerSpeed;
 
         // checks if the player is grounded.
         if (grounded == true) {
-            // do nothing, maybe jump later
-            return;
+            // if space key hit, jump.
+            if (Input.GetKeyDown(KeyCode.Space)) {
+                _yVelocity = _jumpHeight;
+                _canDoubleJump = true;
+            }
         } else {
+            // check for double jump
+            if (Input.GetKeyDown(KeyCode.Space) && _canDoubleJump == true) {
+                _yVelocity += _doubleJumpHeight;
+                _canDoubleJump = false;
+            }
+
             // applies gravity if the player is not grounded.
-            velocity.y -= _gravity;
+            _yVelocity -= _gravity;
         }
 
+        // setting current velocity on y axis to our cached velocity in _yVelocity.
+        velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
     }
 }
