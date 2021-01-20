@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private CharacterController _controller;
     [SerializeField]
     private float _playerSpeed = 5.0f;
     private float _gravity = 1.0f;
@@ -12,10 +11,19 @@ public class Player : MonoBehaviour
     private float _doubleJumpHeight = 40.0f;
     private float _yVelocity;
     private bool _canDoubleJump = false;
+    private int _playerCoins;
+
+    private CharacterController _controller;
+    private UIManager _uiManager;
 
     void Start()
     {
         _controller = GetComponent<CharacterController>();
+
+        _uiManager = GameObject.Find("Canvas").GetComponent<UIManager>();
+        if (_uiManager == null) {
+            Debug.LogError("UI Manager is null");
+        }
     }
 
     void Update()
@@ -48,5 +56,11 @@ public class Player : MonoBehaviour
         // setting current velocity on y axis to our cached velocity in _yVelocity.
         velocity.y = _yVelocity;
         _controller.Move(velocity * Time.deltaTime);
+    }
+
+    public void addCoins()
+    {
+        _playerCoins++;
+        _uiManager.updateCoins(_playerCoins);
     }
 }
