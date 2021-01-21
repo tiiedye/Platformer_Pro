@@ -7,8 +7,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private float _playerSpeed = 5.0f;
     private float _gravity = 1.0f;
-    private float _jumpHeight = 25.0f;
-    private float _doubleJumpHeight = 30.0f;
+    private float _jumpHeight = 30.0f;
     private float _yVelocity;
     private bool _canDoubleJump = false;
     private int _playerCoins;
@@ -45,7 +44,7 @@ public class Player : MonoBehaviour
         } else {
             // check for double jump
             if (Input.GetKeyDown(KeyCode.Space) && _canDoubleJump == true) {
-                _yVelocity += _doubleJumpHeight;
+                _yVelocity += _jumpHeight;
                 _canDoubleJump = false;
             }
 
