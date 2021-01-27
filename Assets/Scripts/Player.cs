@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class Player : MonoBehaviour
     private float _yVelocity;
     private bool _canDoubleJump = false;
     private int _playerCoins;
+    [SerializeField]
+    private int _lives = 3;
 
     private CharacterController _controller;
     private UIManager _uiManager;
@@ -23,6 +26,8 @@ public class Player : MonoBehaviour
         if (_uiManager == null) {
             Debug.LogError("UI Manager is null");
         }
+
+        _uiManager.updateLives(_lives);
     }
 
     void Update()
@@ -61,5 +66,15 @@ public class Player : MonoBehaviour
     {
         _playerCoins++;
         _uiManager.updateCoins(_playerCoins);
+    }
+
+    public void removeLife()
+    {
+        _lives--;
+        _uiManager.updateLives(_lives);
+
+        if (_lives < 1) {
+            SceneManager.LoadScene(0);
+        }
     }
 }
